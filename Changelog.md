@@ -5,6 +5,8 @@ Features:
  * Code Generator: Added ``.selector`` member on external function types to retrieve their signature.
  * Code Generator: Keep a single copy of encoding functions when using the experimental "ABIEncoderV2".
  * Optimizer: Add new optimization step to remove unused ``JUMPDEST``s.
+ * Static Analyzer: Warn for using deprecated builtins ``sha3`` and ``suicide``
+   (replaced by ``keccak256`` and ``selfdestruct``, introduced in 0.4.2 and 0.2.0, respectively).
  * Syntax Checker: Warn if no visibility is specified on contract functions.
  * Type Checker: Display helpful warning for unused function arguments/return parameters.
  * Type Checker: Do not show the same error multiple times for events.
