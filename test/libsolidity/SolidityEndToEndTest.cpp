@@ -10075,6 +10075,31 @@ BOOST_AUTO_TEST_CASE(function_types_sig)
 	BOOST_CHECK(callContractFunction("h()") == encodeArgs(asString(FixedHash<4>(dev::keccak256("f()")).asBytes())));
 }
 
+BOOST_AUTO_TEST_CASE(abi_encode)
+{
+	char const* sourceCode = R"(
+		contract C {
+			function f() returns (bytes) {
+				return abi.encode(1, 2);
+			}
+			function g() returns (bytes4) {
+				function () external returns (bytes4) fun = this.f;
+				return fun.selector;
+			}
+			function h() returns (bytes4) {
+				function () external returns (bytes4) fun = this.f;
+				var funvar = fun;
+				return funvar.selector;
+			}
+		}
+	)";
+	compileAndRun(sourceCode, 0, "C");
+	BOOST_CHECK(callContractFunction("f()") == encodeArgs(asString(FixedHash<4>(dev::keccak256("f()")).asBytes())));
+	BOOST_CHECK(callContractFunction("g()") == encodeArgs(asString(FixedHash<4>(dev::keccak256("f()")).asBytes())));
+	BOOST_CHECK(callContractFunction("h()") == encodeArgs(asString(FixedHash<4>(dev::keccak256("f()")).asBytes())));
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
 
 }
